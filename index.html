@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WARNO 更新日志档案馆</title>
+<style>
+  :root {
+    --bg:#10141a; --panel:rgba(25,31,40,0.88); --line:#2b3441; --txt:#dbe3ec; --dim:#8794a3;
+    --acc:#e8c15a; --add:#7ec87e; --del:#e57373;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { background:var(--bg); }
+  body { background:transparent; color:var(--txt); font-family:"Segoe UI","Microsoft YaHei",sans-serif; padding:26px 30px 60px; max-width:1080px; margin:0 auto; }
+
+  /* ===== 顶部封面：index-cover.jpg，40% 透明 ===== */
+  .hero { position:relative; overflow:hidden; height:340px; border-radius:14px; border:1px solid var(--line); }
+  .hero::before {
+    content:''; position:absolute; inset:0; z-index:0;
+    background:url('index-cover.jpg') center/cover no-repeat;
+    opacity:0.4; /* 40% 不透明度 */
+  }
+  /* ===== 封面下方标题 ===== */
+  .hero-title { text-align:center; margin:22px 0 26px; }
+  .hero-title h1 { font-size:42px; color:#fff; letter-spacing:2px; text-shadow:0 2px 12px rgba(0,0,0,0.8); }
+
+  /* ===== 双语切换 ===== */
+  .lang-switch { position:fixed; top:14px; right:18px; z-index:20; display:flex; gap:6px; }
+  .lang-switch button { background:var(--panel); border:1px solid var(--line); color:var(--txt); border-radius:6px; padding:5px 12px; cursor:pointer; font-size:13px; }
+  .lang-switch button.on { border-color:var(--acc); color:var(--acc); }
+  .t-en { display:none; }
+  .lang-en .t-zh { display:none; }
+  .lang-en .t-en { display:inline; }
+
+  /* ===== 开屏动画 ===== */
+  .splash { position:fixed; inset:0; z-index:999; background:#000; display:flex; align-items:center; justify-content:center; transition:opacity 0.8s ease; }
+  .splash video { width:100%; height:100%; object-fit:cover; }
+  .splash .skip {
+    position:absolute; right:18px; top:68px; z-index:2; /* top:68px = 原 18px + 下移 50px */
+    background:rgba(0,0,0,0.55); color:#fff; border:1px solid rgba(255,255,255,0.35);
+    font-size:13px; padding:6px 16px; border-radius:16px; cursor:pointer; user-select:none;
+    transition:opacity 0.3s;
+  }
+  .splash .skip:hover { background:rgba(0,0,0,0.8); }
+  /* 隐藏 = 淡出（opacity 过渡 0.8s），完成后不再响应点击 */
+  .splash.hidden { opacity:0; pointer-events:none; }
+  /* 移动端（窄屏或触屏）：不显示开屏动画，视频不加载不播放 */
+  @media (max-width: 768px), (hover: none) and (pointer: coarse) {
+    .splash { display:none; }
+  }
+
+  /* ===== 日志列表 ===== */
+  .list-title { font-size:15px; color:var(--dim); margin:0 0 12px 4px; letter-spacing:1px; }
+  .entry {
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;
+    background:var(--panel); border:1px solid var(--line); border-radius:9px;
+    padding:13px 18px; margin-bottom:10px; transition:border-color .15s;
+  }
+  .entry:hover { border-color:var(--acc); }
+  .entry a { color:var(--acc); text-decoration:none; font-size:16px; font-weight:600; }
+  .entry .meta { color:var(--dim); font-size:12.5px; }
+  .entry .meta .tag { display:inline-block; background:#17331c; color:var(--add); border-radius:4px; padding:1px 7px; margin-right:8px; font-size:11px; }
+
+  footer { margin-top:30px; text-align:center; color:var(--dim); font-size:12px; }
+</style>
+</head>
+<body>
+
+  <div class="lang-switch">
+    <button id="langCN" class="on">CN</button>
+    <button id="langEN">EN</button>
+  </div>
+
+  <!-- ===== 开屏动画：Intro_Screen_1~4.webm 随机播放，固定播放 2.3 秒后隐藏 ===== -->
+  <div class="splash" id="splash">
+    <video id="splashVideo" muted playsinline></video>
+    <div class="skip" id="splashSkip"><span class="t-zh">跳过 ▶</span><span class="t-en">Skip ▶</span></div>
+  </div>
+
+  <!-- 顶部封面 -->
+  <div class="hero"></div>
+
+  <!-- 封面下方标题 -->
+  <div class="hero-title">
+    <h1><span class="t-zh">WARNO 更新日志档案馆</span><span class="t-en">WARNO Patch Notes Archive</span></h1>
+  </div>
+
+  <div class="list-title">📜 <span class="t-zh">往期更新日志</span><span class="t-en">Previous Patch Notes</span></div>
+
+  <!-- ===== 日志列表 ===== -->
+  <div id="archive">
+    <div class="entry">
+      <a href="patch-notes-197351-201602.html"><span class="t-zh">197351 → 201602 更新日志</span><span class="t-en">197351 → 201602 Patch Notes</span></a>
+      <span class="meta"><span class="tag"><span class="t-zh">最新</span><span class="t-en">Latest</span></span><span class="t-zh">WARNO 补丁说明</span><span class="t-en">WARNO Patch Notes</span></span>
+    </div>
+  </div>
+
+  <footer><span class="t-zh">WARNO 更新日志档案馆</span><span class="t-en">WARNO Patch Notes Archive</span> · Created By FliegerRgt63 · Powered by Deepseek Harness</footer>
+
+  <script>
+    (function(){
+      var splash = document.getElementById('splash');
+      var video = document.getElementById('splashVideo');
+      var skip = document.getElementById('splashSkip');
+      var INTRO_MS = 5000; // 固定播放时长 5 秒，到点即隐藏（无需播完）
+      var FADE_MS = 800;   // 淡出过渡时长（与 CSS 一致）
+      function hide(){
+        if (splash.classList.contains('hidden')) return;
+        splash.classList.add('hidden'); // 触发 opacity 淡出
+        try { video.pause(); } catch(e){}
+      }
+      if (!video || !splash) return;
+      // 从 5 个开屏版本中随机选一个（4 个 webm + 1 个 mp4）
+      var intros = ['Intro_Screen_1.webm', 'Intro_Screen_2.webm', 'Intro_Screen_3.webm', 'Intro_Screen_4.webm', 'Intro_Screen_Main.mp4'];
+      video.src = intros[Math.floor(Math.random() * intros.length)];
+      // 视频不存在 / 加载失败：立即隐藏
+      video.addEventListener('error', hide);
+      // 到固定时长即隐藏（不依赖视频是否播完）
+      setTimeout(hide, INTRO_MS);
+      // 点击跳过：隐藏
+      skip.addEventListener('click', hide);
+      // 播放源可用时尝试自动播放（静音 + playsinline 保证可自动播放）
+      video.addEventListener('canplay', function(){
+        var p = video.play();
+        if (p && p.catch) p.catch(hide);
+      });
+    })();
+    // ===== 双语切换（与 patch-notes 共用 warno-lang 偏好） =====
+    (function(){
+      function setLang(l){
+        document.body.classList.toggle('lang-en', l === 'en');
+        document.getElementById('langCN').classList.toggle('on', l !== 'en');
+        document.getElementById('langEN').classList.toggle('on', l === 'en');
+        try { localStorage.setItem('warno-lang', l); } catch(e){}
+      }
+      document.getElementById('langCN').addEventListener('click', function(){ setLang('zh'); });
+      document.getElementById('langEN').addEventListener('click', function(){ setLang('en'); });
+      var saved = (function(){ try { return localStorage.getItem('warno-lang'); } catch(e){ return null; } })();
+      setLang(saved === 'en' ? 'en' : 'zh');
+    })();
+  </script>
+
+</body>
+</html>
